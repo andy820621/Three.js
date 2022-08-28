@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r99/three.min.js"
+			integrity="sha512-0tlhMhMGPohLm/YwaskxH7jJuUGqU/XPTl+HE0dWrhGbpEBRIZYMQdbHC0CmyNPzZKTBd8JoVZnvMcL7hzlFOg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script>
+
+		<style>
+			html,
+			body {
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			let camera, scene, renderer, geometry, material, mesh, light;
+
+			function init() {
+				scene = new THREE.Scene();
+				renderer = new THREE.WebGLRenderer({
+					antialias: true,
+				});
+				renderer.setSize(innerWidth, innerHeight);
+
+				document.body.appendChild(renderer.domElement);
+
+				geometry = new THREE.BoxGeometry(0.24, 0.24, 0.24);
+				// material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // can't see depth of field
+				// material = new THREE.MeshNormalMaterial();
+				material = new THREE.MeshLambertMaterial({ color: 0xff000 });
+				mesh = new THREE.Mesh(geometry, material);
+				scene.add(mesh);
+
+				// add light
+				light = new THREE.PointLight(0x00ff00, 1, 100);
+				light.position.set(24, 24, 24);
+				scene.add(light);
+
+				camera = new THREE.PerspectiveCamera(
+					70,
+					innerWidth / innerHeight,
+					0.01,
+					10
+				);
+				camera.position.z = 1;
+			}
+			init();
+
+			function render() {
+				// mesh.position.y += 0.001;
+				mesh.rotation.x += 0.02;
+				mesh.rotation.z += 0.02;
+
+				light.position.y += 0.001;
+
+				renderer.render(scene, camera);
+				requestAnimationFrame(render);
+			}
+			render();
+		</script>
+	</body>
+</html>
